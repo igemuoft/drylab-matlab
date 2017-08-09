@@ -17,36 +17,20 @@ function model_ODEs()
     ode6 = diff(GFP) == k_GFP*mRNA_GFP - d_GFP*GFP;
     odes = [ode1; ode2; ode3; ode4; ode5; ode6];
 
-    % solve the ODEs with initial conditions (C1-C6)
-    cond1 = k_RFPmRNA(0) == 0;
-    cond2 = k_GFPmRNA(0) == 1;
-    cond3 = mRNA_RFP(0) == 1;
-    cond4 = mRNA_GFP(0) == 1;
-    cond5 = RFP(0) == 0;
-    cond6 = GFP(0) == 0;
-    conds = [cond1; cond2; cond3; cond4; cond5; cond6];
-    [k_RFPmRNA_Sol(t), k_GFPmRNA_Sol(t), mRNA_RFP_Sol(t), mRNA_GFP_Sol(t), ...
-        RFP_Sol(t), GFP_Sol(t)] = dsolve(odes, conds);
+    % solve the 
+    [k_RFPmRNA_Sol(t), k_GFPmRNA_Sol(t), mRNA_RFP_Sol(t), mRNA_GFP_Sol(t) ...
+        RFP_Sol(t), GFP_Sol(t)] = dsolve(odes);
 
-    % Note: can simplify the equation by calling S = simplify(S)
-    % but unnecessary in this case
+
+    % can simplify the equation by calling S = simplify(S)
     
     % plot
-    fplot(k_RFPmRNA_Sol);
-    hold on;
-    fplot(k_GFPmRNA_Sol);
-    hold on;
-    fplot(mRNA_RFP_Sol);
-    hold on;
-    fplot(mRNA_GFP_Sol);
-    hold on;
-    fplot(RFP_Sol);
-    hold on;
-    fplot(GFP_Sol);
-    grid on;
-    legend('k_RFPmRNA_Sol','k_GFPmRNA_Sol', 'mRNA_RFP_Sol', 'mRNA_GFP_Sol', ...
-        'RFP_Sol', 'GFP_Sol', 'Location','best');
-    title ('Blue Light Mediated Transcriptional Activation');
+    fplot(uSol);
+    %hold on;
+    %fplot(vSol);
+    %grid on;
+    %legend('uSol','vSol','Location','best');
+    %title ('Test ODE Plot');
     
     % plotting with different initial variables example:
     %for i = 0:10
