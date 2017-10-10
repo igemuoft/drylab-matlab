@@ -113,6 +113,8 @@ L_off = alpha_x / ((1+x2_off^n) * gamma_L);
 disp([newline,'light off',newline,'x2: ',num2str(x2_off),newline,'theta: ',num2str(T_off),newline,'lambda: ',num2str(L_off)])
 
 %% Plotting of the Solutions %%
+
+% 2D figure of protein concentrations over time under square function light
 figure
 plot(time, solnX, time, solnT, time, solnL, time, mu(time));
 title('Plot of Equations 5, 6, and 7, along with Light Values');
@@ -121,20 +123,23 @@ xlabel('time');
 legend('x2', 'theta', 'lambda', 'light', 'Location', 'NE');
 axis([-inf inf 0 1.8])
 
+% uses parasweep - graphs values of theta at t=2 (can change this in the
+% parasweep function) for theta=0:10 and gamma_theta=0:10
 [K, gT] = meshgrid(0:0.5:10, 0:0.5:10);
 Theta = parasweep_kG(K, gT);
-
 figure
 surf(K, gT, Theta)
 xlabel('k')
 ylabel('\gamma_\theta')
-zlabel('out')
+zlabel('\theta')
+title('Parameter sweep of Theta over k and \gamma_\theta at t=2')
 
+% equilibrium time graph of lambda over gamma_2=0:10 and gamma_lambda
 [gamma_2_mesh, gamma_lambda_mesh] = meshgrid(0:0.5:10, 0:0.5:10);
 Eqm_time_L = eqm_time(gamma_2_mesh, gamma_lambda_mesh, time, light_period);
-
 figure
 surf(gamma_2_mesh, gamma_lambda_mesh, Eqm_time_L)
 xlabel('\gamma_2')
 ylabel('\gamma_\lambda')
 zlabel('t_e_q_m')
+title('Equilibrium time graph of \lambda over \gamma_2=0:10 and \gamma_\lambda')
