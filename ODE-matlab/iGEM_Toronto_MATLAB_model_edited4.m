@@ -26,7 +26,7 @@
 % modify these values as needed
 start_time = 0;
 end_time = 100;
-precision = 0.1; % lower = more accurate
+precision = 0.05; % lower = more accurate
 light_period = 100;
 
 total_points = (end_time - start_time) / precision;
@@ -134,12 +134,30 @@ ylabel('\gamma_\theta')
 zlabel('\theta')
 title('Parameter sweep of Theta over k and \gamma_\theta at t=2')
 
-% equilibrium time graph of lambda over gamma_2=0:10 and gamma_lambda
-[gamma_2_mesh, gamma_lambda_mesh] = meshgrid(0:0.5:10, 0:0.5:10);
+% equilibrium time graph of lambda over gamma_2=0:1 and gamma_lambda=0:10
+[gamma_2_mesh, gamma_lambda_mesh] = meshgrid(0:0.05:1, 0:0.5:10);
 Eqm_time_L = eqm_time(gamma_2_mesh, gamma_lambda_mesh, time, light_period);
 figure
 surf(gamma_2_mesh, gamma_lambda_mesh, Eqm_time_L)
 xlabel('\gamma_2')
 ylabel('\gamma_\lambda')
 zlabel('t_e_q_m')
-title('Equilibrium time graph of \lambda over \gamma_2=0:10 and \gamma_\lambda')
+title('Equilibrium time graph of \lambda over \gamma_2=0:0.5 and \gamma_\lambda=0:10')
+
+%% lambda concentration as \gamma_\lambda varies - not working yet
+% Equation 5 - dx2/dTau:
+%   This is
+dx2 = @(t, x2) psi_1(t) - gamma_2*x2;
+solnX = rk(dx2, 1, time);
+solnL = zeros(20,total_points);
+% Equation 7 - dLambda/dTau:
+%   This is
+for i=1:20
+    dL = @(t, L, x2) (alpha_x/(1 + x2^n)) - (i-1)/2*L;
+    solnL(i,:) = rk2(dL, 0, solnX, time);
+end
+figure
+surf(repmat(time,20,1),gamma_L,solnL);
+xlabel('time')
+ylabel('\gamma_\lambda')
+zlabel('\lambda')

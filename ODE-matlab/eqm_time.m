@@ -1,4 +1,11 @@
 function out = eqm_time(gamma_2, gamma_lambda, time, period);
+    % Determines equilibrium time from light off to light on, defined as
+    % the time required for lambda to increase by 85% of difference between
+    % light_on equilibrium and light_off equilibrium
+    
+    % input: time: vector of start to end time, period: light oscillation
+    % period (kept as same as end_time - start_time)
+
     % Change K and Gamma_Theta
     N = length(gamma_lambda);
     out = zeros(N, N);
@@ -54,14 +61,17 @@ function out = eqm_time(gamma_2, gamma_lambda, time, period);
             % solutions for off:
             x2_off = psi_1_off ./ gamma_2(i,j);
             init_value = alpha_x / ((1+x2_off^n) * gamma_lambda(i,j));
-        
+            found_value = 0;
             for k = 1:N
-                if((L(k)-init_value) >= (eqm_value-init_value)*0.99)
+                if((L(k)-init_value) >= (eqm_value-init_value)*0.85)
                     out(i,j) = time(k)*10;
+                    found_value = 1;
                     break
                 end
             end
-            
+            if (found_value==0)
+                out(i,j)=10;
+            end
         
         end
 

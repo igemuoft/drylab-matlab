@@ -1,5 +1,5 @@
 function out = parasweep_kG(k, gamma_theta);
-    % sweepts the ODE for tau over parameters (k,gamma_theta) for fixed
+    % sweepts the ODE for theta over parameters (k,gamma_theta) for fixed
     % amount of time
     % input: (k, gamma_theta) is a mesh grid
     % output: out is a matrix of theta values (same dim as k, gamma_theta)
