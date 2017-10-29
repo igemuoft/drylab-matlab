@@ -1,0 +1,72 @@
+function out = parasweep_ax_gL(alpha_x, gamma_L, x2, ON);
+% function out = parasweep_ax_gL(alpha_x, gamma_L, x2, ON);
+%
+% parasweep_ax_gL: performs a parameter sweep by evaluating the solution to
+% the differential equation for 'theta' at differnt values of k and gamma_theta
+%
+% Usage: out = parasweep_ax_gL(alpha_x, gamma_L, x2, 1);
+%
+% Parameters:
+%	alpha_x: a matrix of values, ideally generated through the meshgrid function
+%	gamma_L: a matrix of values, ideally generated through the meshgrid
+%	function, the transpose of alpha_x
+%   x2: column vector of the column containing the max values of the x2 function
+%   ON:  binary value for if the light is on or off
+%	
+% Returns:
+%	out: matrix of solution values, each value associated with the
+%	corresponding index of the input matrices.
+
+N = length(alpha_x);
+out = zeros(N, N);
+
+start_time = 0;
+end_time = 6;
+precision = 0.1; % lower = more accurate
+light_period = 2;
+
+total_points = (end_time - start_time) / precision;
+time = linspace(start_time, end_time, total_points);
+
+% n: the exponent in the Michaelis Menten Equations
+n = 1;
+
+% alpha_2:
+alpha_2 = 0.92356;
+
+% K_1:
+K_1 = 0.3;
+
+% R_1:
+R_1 = 1.7;
+
+% mu: this is the light function, defined as a square wave oscillating
+%     between values 0 (off) and 1 (on). The duty cycle can be altered by
+%     including factors to adjust the 't' value.
+%mu = @(t) (square(t, 50)+1)/2; % using square function (works)
+mu = @(t) mod(ceil(t./light_period),2); % w/o square() - also works now
+
+% psi_1: 
+psi_1 = @(t) alpha_2/((K_1^n + R_1^n).^(1-mu(t)));
+length(time)
+length(x2)
+    for i=1:N
+
+        for j = 1:N
+
+        % Equation 7 - dLambda/dTau:
+        %   This is
+        dL = @(t, L, x2) (alpha_x(i,j)./(1 + x2^n)) - gamma_L(i,j).*L;
+        solnL = rk2(dL, 0, x2, time);
+        
+            if ON
+                out(i, j) = solnL(end_time/precision);
+            else
+                out(i, j) = solnL((2*light_period-1)/precision);
+            end 
+        end
+
+
+    end
+
+end
