@@ -73,7 +73,7 @@ gamma_L = 0.6;
 
 %% Listing of the Differential Equations %%
 % In this section, the differential equations of interest for the model are
-%   listed, defined, and sllved for. This model is currently solved using the
+%   listed, defined, and solved for. This model is currently solved using the
 %   Runge-Kutta method, with the 'rk' function written by Peter Brinkmann. The
 %   'rk2' function uses the same algorithm, but was slightly adapted to allow
 %   for a third parameter to be included in the inline function.
